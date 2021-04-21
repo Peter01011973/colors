@@ -1,11 +1,22 @@
 import './App.scss';
-import {Component} from 'react'
+import {Component, createRef} from 'react'
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+    // this.start = this.start.bind(this);
+
+    this.boxesCount = 50;
+    this.boxesRef = [];
+    for (let i=0; i<this.boxesCount; i++) this.boxesRef.push(createRef());
+    console.log('1: ',this.boxesRef);
+  }
+
   state =  {
     running: true
   }
-   getRandomColor() {
+
+  getRandomColor() {
     let letters = "0123456789ABCDEF"
     let color = '#'
     for (let i = 0; i < 6; i++){
@@ -14,117 +25,29 @@ class App extends Component {
     return color
   }
 
-   start() {
-    const boxes = document.querySelectorAll('.box')
-    
-  //  boxes[0].style.background = this.getRandomColor();
-    if(this.running) {
-      boxes.map(box =>  box.style.background = this.getRandomColor())
-      setTimeout(this.start, 500)
+  start = () => {
+    if(this.state.running) {
+      this.boxesRef.forEach(boxRef =>{
+        console.log('boxRef', boxRef);
+        setInterval(
+          () => boxRef.current.style.background = this.getRandomColor(), 1000
+        )
+      })
     }
-    console.log(this.getRandomColor());
-    
   }
-
   
   render() {
-    console.log(this.state.running);
-  
-    
-  
-  return (
-    <div>
-      <div className="box-container">
-        <div className="box"></div>
-        <div className="box"></div>
-        <div className="box"></div>
-        <div className="box"></div>
-        <div className="box"></div>
-        <div className="box"></div>
-        <div className="box"></div>
-        <div className="box"></div>
-        <div className="box"></div>
-        <div className="box"></div>
-        <div className="box"></div>
-        <div className="box"></div>
-        <div className="box"></div>
-        <div className="box"></div>
-        <div className="box"></div>
-        <div className="box"></div>
-        <div className="box"></div>
-        <div className="box"></div>
-        <div className="box"></div>
-        <div className="box"></div>
-        <div className="box"></div>
-        <div className="box"></div>
-        <div className="box"></div>
-        <div className="box"></div>
-        <div className="box"></div>
-        <div className="box"></div>
-        <div className="box"></div>
-        <div className="box"></div>
-        <div className="box"></div>
-        <div className="box"></div>
-        <div className="box"></div>
-        <div className="box"></div>
-        <div className="box"></div>
-        <div className="box"></div>
-        <div className="box"></div>
-        <div className="box"></div>
-        <div className="box"></div>
-        <div className="box"></div>
-        <div className="box"></div>
-        <div className="box"></div>
-        <div className="box"></div>
-        <div className="box"></div>
-        <div className="box"></div>
-        <div className="box"></div>
-        <div className="box"></div>
-        <div className="box"></div>
-        <div className="box"></div>
-        <div className="box"></div>
-        <div className="box"></div>
-        <div className="box"></div>
-        <div className="box"></div>
-        <div className="box"></div>
-        <div className="box"></div>
-        <div className="box"></div>
-        <div className="box"></div>
-        <div className="box"></div>
-        <div className="box"></div>
-        <div className="box"></div>
-        <div className="box"></div>
-        <div className="box"></div>
-        <div className="box"></div>
-        <div className="box"></div>
-        <div className="box"></div>
-        <div className="box"></div>
-        <div className="box"></div>
-        <div className="box"></div>
-        <div className="box"></div>
-        <div className="box"></div>
-        <div className="box"></div>
-        <div className="box"></div>
-        <div className="box"></div>
-        <div className="box"></div>
-        <div className="box"></div>
-        <div className="box"></div>
-        <div className="box"></div>
-        <div className="box"></div>
-        <div className="box"></div>
-        <div className="box"></div>
-        <div className="box"></div>
-        <div className="box"></div>
-        <div className="box"></div>
-        <div className="box"></div>
-        <div className="box"></div>
+    return (
+      <div>
+        <div className="box-container">
+          { this.boxesRef.map((boxRef, index) =>(<div ref={boxRef} className="box" key = {index}>{index}</div>)) }
+        </div>
+        <div className="container">
+          <button onClick={this.start} className="btn" id='btn-1'>Change Color</button>
+        </div>
       </div>
-      <div className="container">
-        <button onClick={() => this.start()} className="btn" id='btn-1'>Change Color</button>
-      </div>
-    </div>
-    );
-  }
+      );
+    }
 }
 
 export default App;
